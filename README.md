@@ -22,10 +22,11 @@
 <img width="761" alt="스크린샷 2024-03-03 오후 5 40 48" src="https://github.com/Nahhh-j/GenerEase/assets/105144666/91484e5a-edf7-4830-8c06-760fb63916f9">
 
 ### 🚀 주요기능
-![제목을-입력해주세요_-001 (1)](https://github.com/Nahhh-j/GenerEase/assets/105144666/e29685df-09b2-418d-9688-a483573e78b1)
+![주요기능](https://github.com/Nahhh-j/GenerEase/assets/105144666/e29685df-09b2-418d-9688-a483573e78b1)
 
 ## 3. 팀 소개
-![제목을-입력해주세요_-001](https://github.com/Nahhh-j/GenerEase/assets/105144666/84890e41-8985-4174-b1ad-117e410be79b)
+![팀 소개](https://github.com/Nahhh-j/GenerEase/assets/105144666/2398ae0e-fd7c-4368-9861-eb7e9a6c41ed)
+
 
 ## 4. 기타
 [FIGMA](https://www.figma.com/file/LJj8TG80DQ5Dt2QPuB2bsy/generease?type=design&node-id=25%3A828&mode=design&t=jsZVz2HE17D5OEzu-1 "제너이즈의 UI")
