@@ -73,6 +73,7 @@ class CustomBackButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap ??
               () {
+                FocusManager.instance.primaryFocus?.unfocus();
                 Get.back();
               },
           borderRadius: BorderRadius.circular(14),

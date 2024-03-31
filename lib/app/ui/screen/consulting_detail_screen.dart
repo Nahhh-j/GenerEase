@@ -44,7 +44,7 @@ class _ConsultingDetailScreenState extends State<ConsultingDetailScreen> {
       builder: (context) {
         return Container(
           width: Get.width,
-          height: Get.height - 200,
+          height: Get.height - 300,
           padding: const EdgeInsets.only(
             top: 20,
             bottom: 20,
@@ -59,6 +59,7 @@ class _ConsultingDetailScreenState extends State<ConsultingDetailScreen> {
             ),
           ),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 width: 57,
@@ -85,7 +86,7 @@ class _ConsultingDetailScreenState extends State<ConsultingDetailScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: Image.asset(
-                    '.png',
+                    'assets/images/person.png',
                     fit: BoxFit.fill,
                   ),
                 ),

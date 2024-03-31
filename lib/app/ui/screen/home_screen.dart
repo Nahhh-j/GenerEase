@@ -15,8 +15,8 @@ class HomeScreen extends StatelessWidget {
       width: Get.width,
       height: Get.height,
       padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
+        // left: 20,
+        // right: 20,
         top: 20,
       ),
       color: Colors.white,
@@ -25,6 +25,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             const Row(
               children: [
+                SizedBox(
+                  width: 20,
+                ),
                 Text(
                   'GENEREASE',
                   style: TextStyle(
@@ -38,183 +41,209 @@ class HomeScreen extends StatelessWidget {
                   color: Color(0xffF5B700),
                   size: 30,
                 ),
+                SizedBox(
+                  width: 20,
+                ),
               ],
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(100),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 20,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.asset(
-                            'assets/images/person.png',
-                            fit: BoxFit.fill,
+                        Container(
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.asset(
+                              'assets/images/person.png',
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                      ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/speechBalloon.png',
-                            width: Get.width * 2 / 3,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '조나희님',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 12,
-                                  )
-                                ],
-                              ),
-                              RichText(
-                                text: TextSpan(
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/speechBalloon.png',
+                              width: Get.width * 2 / 3,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
                                   children: [
-                                    TextSpan(
-                                      text: '다가오는 예약 일정',
+                                    Text(
+                                      '조나희님',
                                       style: TextStyle(
-                                        color: Color(0xff616161),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: ' 2024',
-                                      style: TextStyle(
-                                        color: Color(0xff2F4EFF),
-                                        fontSize: 12,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                    TextSpan(
-                                      text: '년',
-                                      style: TextStyle(
-                                        color: Color(0xff616161),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: ' 3',
-                                      style: TextStyle(
-                                        color: Color(0xff2F4EFF),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: '월',
-                                      style: TextStyle(
-                                        color: Color(0xff616161),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: ' 4',
-                                      style: TextStyle(
-                                        color: Color(0xff2F4EFF),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: '일',
-                                      style: TextStyle(
-                                        color: Color(0xff616161),
-                                        fontSize: 12,
-                                      ),
-                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 12,
+                                    )
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _blueBox(
-                        ontap: () {
-                          Get.to(() => const ConsultingScreen());
-                        },
-                        icon: 'computer',
-                        text: '예약 상담',
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      _blueBox(
-                        ontap: () {
-                          Get.to(() => const ScheduleScreen());
-                        },
-                        icon: 'calendar',
-                        text: '예약 일정',
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _blueBox(
-                        ontap: () {},
-                        icon: 'mailIcon',
-                        text: '친구초대',
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      _blueBox(
-                        ontap: () {
-                          Get.to(() => const ContactsScreen());
-                        },
-                        icon: 'call_ring',
-                        text: '비상 연락망',
-                        iconSize: 70,
-                      ),
-                    ],
-                  ),
-                  _whiteBox(
-                    ontap: () {
-                      print('앱 가이드 영상');
-                    },
-                    text: '앱 가이드 영상',
-                    imagePath: 'assets/icons/check.png',
-                  ),
-                  _whiteBox(
-                    ontap: () {
-                      print('도우미 신청');
-                      Get.to(() => const ApplyScreen());
-                    },
-                    text: '도우미 신청',
-                    imagePath: 'assets/icons/noteIcon.png',
-                  ),
-                ],
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '다가오는 예약 일정',
+                                        style: TextStyle(
+                                          color: Color(0xff616161),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: ' 2024',
+                                        style: TextStyle(
+                                          color: Color(0xff2F4EFF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '년',
+                                        style: TextStyle(
+                                          color: Color(0xff616161),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: ' 3',
+                                        style: TextStyle(
+                                          color: Color(0xff2F4EFF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '월',
+                                        style: TextStyle(
+                                          color: Color(0xff616161),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: ' 4',
+                                        style: TextStyle(
+                                          color: Color(0xff2F4EFF),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '일',
+                                        style: TextStyle(
+                                          color: Color(0xff616161),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        _blueBox(
+                          ontap: () {
+                            Get.to(() => const ConsultingScreen());
+                          },
+                          icon: 'computer',
+                          text: '예약 상담',
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        _blueBox(
+                          ontap: () {
+                            Get.to(() => const ScheduleScreen());
+                          },
+                          icon: 'calendar',
+                          text: '예약 일정',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        _blueBox(
+                          ontap: () {},
+                          icon: 'mailIcon',
+                          text: '친구초대',
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        _blueBox(
+                          ontap: () {
+                            Get.to(() => const ContactsScreen());
+                          },
+                          icon: 'call_ring',
+                          text: '비상 연락망',
+                          iconSize: 70,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    _whiteBox(
+                      ontap: () {
+                        print('앱 가이드 영상');
+                      },
+                      text: '앱 가이드 영상',
+                      imagePath: 'assets/icons/check.png',
+                    ),
+                    _whiteBox(
+                      ontap: () {
+                        print('도우미 신청');
+                        Get.to(() => const ApplyScreen());
+                      },
+                      text: '도우미 신청',
+                      imagePath: 'assets/icons/noteIcon.png',
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
-              height: 80,
+              height: 90,
             ),
           ],
         ),
@@ -229,11 +258,13 @@ class HomeScreen extends StatelessWidget {
     double? iconSize,
   }) {
     return Container(
+      // margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.15),
-            blurRadius: 10,
+            blurRadius: 6,
             spreadRadius: 1,
             offset: const Offset(2, 2),
           ),
@@ -281,6 +312,11 @@ class HomeScreen extends StatelessWidget {
     required String imagePath,
   }) {
     return Container(
+      margin: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        bottom: 25,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         boxShadow: [

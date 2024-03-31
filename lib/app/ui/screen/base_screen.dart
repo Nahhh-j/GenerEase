@@ -39,7 +39,7 @@ class BaseScreen extends GetView<AppPageController> {
           Container(
             width: Get.width,
             height: 100,
-            padding: const EdgeInsets.only(bottom: 20),
+            // padding: const EdgeInsets.only(bottom: 20),
             decoration: const BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.only(

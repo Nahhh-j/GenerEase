@@ -64,156 +64,171 @@ class _RequestMessageScreenState extends State<RequestMessageScreen> {
                   alignment: Alignment.centerLeft,
                   child: CustomBackButton(),
                 ),
-                const SizedBox(
-                  height: 80,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '안녕하세요!',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 29,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                kind == 'register'
-                    ? const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '휴대폰 번호로 가입해주세요.',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 29,
-                            fontWeight: FontWeight.w700,
-                          ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 80,
                         ),
-                      )
-                    : const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '가입한 휴대폰 번호를\n입력해주세요.',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 29,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                kind == 'register'
-                    ? const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '휴대폰 번호는 안전하게 보관되며, 공개되지 않아요.',
-                          style: TextStyle(color: Color(0xffA4A4A4)),
-                        ),
-                      )
-                    : const SizedBox(),
-                Container(
-                  height: 47,
-                  margin: const EdgeInsets.only(top: 30),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      prefixIcon: Container(
-                        padding: const EdgeInsets.all(14),
-                        child: Image.asset('assets/icons/call.png'),
-                      ),
-                      hintText: '휴대폰 번호(-없이 숫자만 입력)',
-                      hintStyle: const TextStyle(color: Color(0xffA4A4A4)),
-                      contentPadding: EdgeInsets.zero,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Color(0xffDBDBDB)),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Color(0xffDBDBDB)),
-                          borderRadius: BorderRadius.circular(18)),
-                    ),
-                    focusNode: _focusNode,
-                    cursorColor: Colors.grey,
-                    controller: phoneNumberCtrl,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                CustomButton(
-                  onTap: () {
-                    _focusNode.unfocus();
-
-                    if (phoneNumberCtrl.value.text == '') {
-                      print('아무것도 입력 안함');
-                    } else {
-                      Get.to(() => const CertificationScreen());
-                      // todo 인증문자 받기
-                    }
-                  },
-                  onLongPress: () {},
-                  height: 58,
-                  margin: const EdgeInsets.only(
-                    top: 20,
-                    bottom: 10,
-                  ),
-                  color: const Color(0xff2F4EFF),
-                  borderRadius: BorderRadius.circular(18),
-                  text: '인증문자 받기',
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                ),
-                Row(
-                  children: [
-                    kind == 'register'
-                        ? const Text(
-                            '이미 계정이 있나요?',
-                            style: TextStyle(color: Color(0xffA4A4A4)),
-                          )
-                        : const Text(
-                            '아직 계정이 없으신가요?',
-                            style: TextStyle(color: Color(0xffA4A4A4)),
-                          ),
-                    kind == 'register'
-                        ? GestureDetector(
-                            onTap: () {
-                              _focusNode.unfocus();
-
-                              setState(() {
-                                kind = 'login';
-                                phoneNumberCtrl.text = '';
-                              });
-                              // FocusManager.instance.primaryFocus?.unfocus();
-                            },
-                            child: const Text(
-                              ' 로그인',
-                              style: TextStyle(
-                                color: Color(0xff2F4EFF),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              _focusNode.unfocus();
-
-                              setState(() {
-                                kind = 'register';
-                                phoneNumberCtrl.text = '';
-                              });
-                              // FocusManager.instance.primaryFocus?.unfocus();
-                            },
-                            child: const Text(
-                              ' 회원가입',
-                              style: TextStyle(
-                                color: Color(0xff2F4EFF),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '안녕하세요!',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 29,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                  ],
+                        ),
+                        kind == 'register'
+                            ? const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '휴대폰 번호로 가입해주세요.',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 29,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              )
+                            : const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '가입한 휴대폰 번호를\n입력해주세요.',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 29,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                        kind == 'register'
+                            ? const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '휴대폰 번호는 안전하게 보관되며, 공개되지 않아요.',
+                                  style: TextStyle(color: Color(0xffA4A4A4)),
+                                ),
+                              )
+                            : const SizedBox(),
+                        Container(
+                          height: 47,
+                          margin: const EdgeInsets.only(top: 30),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              prefixIcon: Container(
+                                padding: const EdgeInsets.all(14),
+                                child: Image.asset('assets/icons/call.png'),
+                              ),
+                              hintText: '휴대폰 번호(-없이 숫자만 입력)',
+                              hintStyle:
+                                  const TextStyle(color: Color(0xffA4A4A4)),
+                              contentPadding: EdgeInsets.zero,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Color(0xffDBDBDB)),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color(0xffDBDBDB),
+                                ),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            focusNode: _focusNode,
+                            cursorColor: Colors.grey,
+                            controller: phoneNumberCtrl,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        CustomButton(
+                          onTap: () {
+                            _focusNode.unfocus();
+
+                            if (phoneNumberCtrl.value.text == '') {
+                              print('아무것도 입력 안함');
+                            } else {
+                              Get.to(() => const CertificationScreen());
+                              // todo 인증문자 받기
+                            }
+                          },
+                          onLongPress: () {},
+                          height: 58,
+                          margin: const EdgeInsets.only(
+                            top: 20,
+                            bottom: 10,
+                          ),
+                          color: const Color(0xff2F4EFF),
+                          borderRadius: BorderRadius.circular(18),
+                          text: '인증문자 받기',
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            kind == 'register'
+                                ? const Text(
+                                    '이미 계정이 있나요?',
+                                    style: TextStyle(color: Color(0xffA4A4A4)),
+                                  )
+                                : const Text(
+                                    '아직 계정이 없으신가요?',
+                                    style: TextStyle(color: Color(0xffA4A4A4)),
+                                  ),
+                            kind == 'register'
+                                ? GestureDetector(
+                                    onTap: () {
+                                      _focusNode.unfocus();
+
+                                      setState(() {
+                                        kind = 'login';
+                                        phoneNumberCtrl.text = '';
+                                      });
+                                      // FocusManager.instance.primaryFocus?.unfocus();
+                                    },
+                                    child: const Text(
+                                      ' 로그인',
+                                      style: TextStyle(
+                                        color: Color(0xff2F4EFF),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      _focusNode.unfocus();
+
+                                      setState(() {
+                                        kind = 'register';
+                                        phoneNumberCtrl.text = '';
+                                      });
+                                      // FocusManager.instance.primaryFocus?.unfocus();
+                                    },
+                                    child: const Text(
+                                      ' 회원가입',
+                                      style: TextStyle(
+                                        color: Color(0xff2F4EFF),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
