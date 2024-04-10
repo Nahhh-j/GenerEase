@@ -2,11 +2,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:generease/app/ui/widget/toast.dart';
 import 'package:get/get.dart';
 
 import 'package:generease/app/routes/app_routes.dart';
 import 'package:generease/app/ui/widget/datepicker.dart';
 import 'package:generease/app/ui/widget/button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,13 +19,14 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final Uri operatingPolicyUrl = Uri.parse(
+      'https://thunder-twister-d63.notion.site/fbf6261d173f49b68893ca728259afc0');
+  final Uri privacyPolicyUrl = Uri.parse(
+      'https://thunder-twister-d63.notion.site/bf41d54689c44a4288a4a6704eb85dd3');
   final FocusNode _focusNode = FocusNode();
-
   TextEditingController nameCtrl = TextEditingController();
-
   DateTime today = DateTime.now();
   DateTime? birthDay;
-
   bool _isChecked1 = false;
   bool _isChecked2 = false;
 
@@ -151,6 +155,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             controller: nameCtrl,
                             keyboardType: TextInputType.text,
                             focusNode: _focusNode,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9a-zA-Zㄱ-ㅎ가-힣]')),
+                            ],
                           ),
                         ),
                         GestureDetector(
@@ -259,17 +267,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(
                           height: 25,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _focusNode.unfocus();
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _focusNode.unfocus();
 
-                            setState(() {
-                              _isChecked1 = !_isChecked1;
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Container(
+                                setState(() {
+                                  _isChecked1 = !_isChecked1;
+                                });
+                              },
+                              child: Container(
                                 width: 18,
                                 height: 18,
                                 margin: const EdgeInsets.only(
@@ -292,30 +300,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       )
                                     : const SizedBox(),
                               ),
-                              const Text(
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                _focusNode.unfocus();
+
+                                if (!await launchUrl(operatingPolicyUrl)) {
+                                  toast('운영정책 페이지를 열 수 없습니다.');
+                                }
+                              },
+                              child: const Text(
                                 '[필수] 이용약관 동의',
                                 style: TextStyle(
                                   color: Color(0xff121212),
                                   fontSize: 12,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 5,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _focusNode.unfocus();
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _focusNode.unfocus();
 
-                            setState(() {
-                              _isChecked2 = !_isChecked2;
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              Container(
+                                setState(() {
+                                  _isChecked2 = !_isChecked2;
+                                });
+                              },
+                              child: Container(
                                 width: 18,
                                 height: 18,
                                 margin: const EdgeInsets.only(
@@ -338,15 +355,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       )
                                     : const SizedBox(),
                               ),
-                              const Text(
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                _focusNode.unfocus();
+
+                                if (!await launchUrl(privacyPolicyUrl)) {
+                                  toast('개인정보 처리방침 페이지를 열 수 없습니다.');
+                                }
+                              },
+                              child: const Text(
                                 '[필수] 개인정보 처리방침 동의',
                                 style: TextStyle(
                                   color: Color(0xff121212),
                                   fontSize: 12,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         CustomButton(
                           onTap: _checkData()

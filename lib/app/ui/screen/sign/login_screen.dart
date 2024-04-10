@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:generease/app/ui/screen/request_message_screen.dart';
+import 'package:generease/app/ui/screen/sign/request_message_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:generease/app/ui/widget/button.dart';

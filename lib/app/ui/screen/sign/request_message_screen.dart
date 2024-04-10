@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:generease/app/ui/screen/certification_screen.dart';
+import 'package:generease/app/ui/screen/sign/certification_screen.dart';
 import 'package:generease/app/ui/widget/button.dart';
 import 'package:get/get.dart';
 
@@ -138,11 +138,13 @@ class _RequestMessageScreenState extends State<RequestMessageScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(18),
                               ),
+                              counterText: '',
                             ),
                             focusNode: _focusNode,
                             cursorColor: Colors.grey,
                             controller: phoneNumberCtrl,
                             keyboardType: TextInputType.number,
+                            maxLength: 11,
                           ),
                         ),
                         CustomButton(

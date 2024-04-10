@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:generease/app/ui/screen/register_screen.dart';
+import 'package:generease/app/ui/screen/sign/register_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:generease/app/ui/widget/button.dart';
@@ -45,6 +45,7 @@ class _CertificationScreenState extends State<CertificationScreen> {
       var seconds = myDuration.inSeconds - reduceSecondsBy;
       if (seconds < 0) {
         timer?.cancel();
+        Get.back();
       } else {
         myDuration = Duration(seconds: seconds);
       }
@@ -157,11 +158,13 @@ class _CertificationScreenState extends State<CertificationScreen> {
                                     borderRadius: BorderRadius.circular(18),
                                     gapPadding: 0,
                                   ),
+                                  counterText: '',
                                 ),
                                 autofocus: true,
                                 focusNode: focusNode1,
                                 showCursor: false,
                                 controller: num1Ctrl,
+                                maxLength: 1,
                                 keyboardType: TextInputType.number,
                                 textInputAction: TextInputAction.next,
                                 textAlign: TextAlign.center,
@@ -201,10 +204,12 @@ class _CertificationScreenState extends State<CertificationScreen> {
                                     ),
                                     borderRadius: BorderRadius.circular(18),
                                   ),
+                                  counterText: '',
                                 ),
                                 focusNode: focusNode2,
                                 showCursor: false,
                                 controller: num2Ctrl,
+                                maxLength: 1,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -243,10 +248,12 @@ class _CertificationScreenState extends State<CertificationScreen> {
                                     ),
                                     borderRadius: BorderRadius.circular(18),
                                   ),
+                                  counterText: '',
                                 ),
                                 focusNode: focusNode3,
                                 showCursor: false,
                                 controller: num3Ctrl,
+                                maxLength: 1,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -285,10 +292,12 @@ class _CertificationScreenState extends State<CertificationScreen> {
                                     ),
                                     borderRadius: BorderRadius.circular(18),
                                   ),
+                                  counterText: '',
                                 ),
                                 focusNode: focusNode4,
                                 showCursor: false,
                                 controller: num4Ctrl,
+                                maxLength: 1,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -329,6 +338,7 @@ class _CertificationScreenState extends State<CertificationScreen> {
                             num2Ctrl.text = '';
                             num3Ctrl.text = '';
                             num4Ctrl.text = '';
+                            stopTimer();
                           },
                           onLongPress: () {},
                           height: 58,

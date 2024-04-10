@@ -1,7 +1,7 @@
 import 'package:generease/app/binding/base_binding.dart';
 import 'package:get/get.dart';
 
-import 'package:generease/app/ui/screen/login_screen.dart';
+import 'package:generease/app/ui/screen/sign/login_screen.dart';
 import 'package:generease/app/ui/screen/base_screen.dart';
 
 abstract class Routes {
