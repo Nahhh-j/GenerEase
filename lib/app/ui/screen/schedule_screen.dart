@@ -13,6 +13,7 @@ class ScheduleScreen extends StatelessWidget {
         padding: const EdgeInsets.only(
           left: 20,
           right: 20,
+          top: 20,
         ),
         child: SafeArea(
           child: Column(
@@ -161,8 +162,9 @@ class ScheduleScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20,),
-                  
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ],

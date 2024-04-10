@@ -38,7 +38,7 @@ class BaseScreen extends GetView<AppPageController> {
           Obx(() => page()),
           Container(
             width: Get.width,
-            height: 100,
+            height: 80,
             // padding: const EdgeInsets.only(bottom: 20),
             decoration: const BoxDecoration(
               color: Colors.black,

@@ -53,7 +53,7 @@ class HistoryScreen extends StatelessWidget {
             ),
             Positioned(
               right: 10,
-              bottom: 80,
+              bottom: 100,
               child: Container(
                 width: 46,
                 height: 46,

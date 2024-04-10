@@ -38,38 +38,46 @@ class ConsultingScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 40,
-              ),
-              _button(
-                icon: 'culturalcenter',
-                text: '문화센터',
-                color: const Color(0xffAE480F),
-              ),
-              _button(
-                icon: 'eduIcon',
-                text: '교육프로그램',
-                color: const Color(0xff97580D),
-              ),
-              _button(
-                icon: 'sportsIcon',
-                text: '스포츠',
-                color: const Color(0xff6D5708),
-              ),
-              _button(
-                icon: 'hospitalIcon',
-                text: '병원',
-                color: const Color(0xffAF3157),
-              ),
-              _button(
-                icon: 'restaurantIcon',
-                text: '식당',
-                color: const Color(0xff408D48),
-              ),
-              _button(
-                icon: 'etcIcon',
-                text: '기타',
-                color: const Color(0xff0F4695),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      _button(
+                        icon: 'culturalcenter',
+                        text: '문화센터',
+                        color: const Color(0xffAE480F),
+                      ),
+                      _button(
+                        icon: 'eduIcon',
+                        text: '교육프로그램',
+                        color: const Color(0xff97580D),
+                      ),
+                      _button(
+                        icon: 'sportsIcon',
+                        text: '스포츠',
+                        color: const Color(0xff6D5708),
+                      ),
+                      _button(
+                        icon: 'hospitalIcon',
+                        text: '병원',
+                        color: const Color(0xffAF3157),
+                      ),
+                      _button(
+                        icon: 'restaurantIcon',
+                        text: '식당',
+                        color: const Color(0xff408D48),
+                      ),
+                      _button(
+                        icon: 'etcIcon',
+                        text: '기타',
+                        color: const Color(0xff0F4695),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

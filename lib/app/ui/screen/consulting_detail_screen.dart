@@ -44,7 +44,7 @@ class _ConsultingDetailScreenState extends State<ConsultingDetailScreen> {
       builder: (context) {
         return Container(
           width: Get.width,
-          height: Get.height - 300,
+          height: Get.height * 3 / 4,
           padding: const EdgeInsets.only(
             top: 20,
             bottom: 20,
