@@ -14,4 +14,4 @@ class Connect(BaseModel):
 class ConnectReq(BaseModel):
     requester_id: int
     responser_id: int
-    connect_way: str
+    content: str

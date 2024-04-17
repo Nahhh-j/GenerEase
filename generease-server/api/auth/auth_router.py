@@ -19,28 +19,25 @@ from core.user import user_service
 
 from jose import jwt, JWTError
 
-# from schema.user_schema import CreateUser
-
 router = APIRouter(
     prefix="/auth",
     tags=["인증"]
 )
 
-# oauth2_scheme = Oauth2PasswordBearer()
-# oauth2_scheme을 Oauth2PasswordBearer로 할 시에, 불필요한 Input 추가
-
 # NO-AUTH
-@router.post("/register", status_code=status.HTTP_204_NO_CONTENT)
+# 회원가입 라우터:
+@router.post("/register", status_code=status.HTTP_200_OK, summary="회원가입(NO AUTH)")
 def create_user(_user_info: CreateUser, db: Session = Depends(database.get_db)):
     # 추후 핸드폰번호 인증을 이 사이 추가.
     user = user_service.get_exist_user(db, _user_info)
     if user:
-        raise HTTPException(status_code= status.HTTP_409_CONFLICT,
-                            detail="존재계정")
+        raise HTTPException(status_code= status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="이미 존재하는 유저의 핸드폰 번호")
     user_service.create_user(db, _user_info)
 
 # NO-AUTH
-@router.post("/login")
+# 로그인 라우터;
+@router.post("/login", summary="로그인(NO AUTH)")
 def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
     # 추후 핸드폰번호 인증을 이 사이 추가.
     user = user_service.get_user(db, phone_no=_user_info.phone_no)
@@ -52,10 +49,13 @@ def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
         "nickname": user.nickname
     }
 # 앱 실행 시 호출(401이면, 로그인으로)
-@router.post("/refresh")
+@router.post("/refresh", summary="토큰 재발급 또는 자동로그인-ALL(AUTH)")
 def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
     try:
-        phone_no = decode_token(refresh_token)
+        # phone_no = decode_token(refresh_token)
+        payload = jwt.decode(refresh_token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+         # type : Bearer, credentails: token
+        phone_no: str = payload.get("sub")
         if phone_no is None:
             raise error.credentials_exception
     except JWTError:
@@ -69,8 +69,6 @@ def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depen
         "refresh_token": issue_refresh(user.phone_no),
         "nickname": user.nickname
     }
-
-
 
 def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(

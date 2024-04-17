@@ -1,5 +1,7 @@
 from typing import List
+from fastapi import HTTPException
 from pydantic import BaseModel, field_validator, EmailStr
+from starlette import status
 
 from schema.user.user_schema import User
 
@@ -21,9 +23,9 @@ class ResponserApply(BaseModel):
     @field_validator("*")
     def not_empty(cls, v):
         if isinstance(v, str) and not v.strip():
-            raise ValueError("Not Allow Null")
+            raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail="하나라도 null일 경우")
         elif isinstance(v, list):
             for item in v:
                 if not item or not item.strip():
-                    raise ValueError("Not Allow Null")
+                    raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail="하나라도 null일 경우")
         return v

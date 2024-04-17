@@ -7,6 +7,7 @@ from api.auth.auth_router import current_user
 from model.models import Responser, User
 from schema.responser.responser_schema import ResponserApply, ResponserListReq
 from util.constants import ROLE
+from util.http_error import http_forbidden_check
 
 # 타입에 따른 responser의 유저 정보
 def get_responsers_by_type(db: Session, _reserve_type: ResponserListReq):
@@ -27,10 +28,10 @@ def get_responsers_by_type(db: Session, _reserve_type: ResponserListReq):
     return user_infos
 
 def create_responser(db: Session, _apply: ResponserApply, _user: User):
-    if _user.role == ROLE.HELPER:
-        raise HTTPException(status_code= status.HTTP_409_CONFLICT,
-                            detail="역할이미도우미")
-        
+    http_forbidden_check(_user.role, ROLE.HELPER)
+
+    # 관리자 측 체크 후 아래 로직 진행
+    
     db_responser = Responser(
         user_id = _user.user_id,
         best_way = str(_apply.best_way),

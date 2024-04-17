@@ -1,3 +1,4 @@
+from datetime import datetime
 import secrets
 import random
 
@@ -8,6 +9,10 @@ def issued_hash():
 def issued_token():
     token = secrets.token_hex(32)
     return token
+
+def get_now():
+    now = datetime.now()
+    return now.date()
 
 def make_nickname():
     fir_nm = [

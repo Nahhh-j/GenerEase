@@ -2,7 +2,7 @@ import json
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from util.constants import ROLE
-from util.util import issued_hash, issued_token, make_nickname
+from util.util import get_now, issued_hash, issued_token, make_nickname
 from model.database import get_db
 from model.models import User
 
@@ -16,8 +16,7 @@ def create_user(db: Session, user_info: CreateUser):
         birth = user_info.birth,
         phone_no = user_info.phone_no,
         role = ROLE.NORMAL,
-        created_at = user_info.created_at
-    )
+        created_at = get_now())
     db.add(db_user)
     db.commit()
 
@@ -26,7 +25,6 @@ def get_user(db: Session, phone_no: str):
 
 def get_exist_user(db: Session, _user_info: CreateUser):
     exist_user = db.query(User).filter(
-        (User.username == _user_info.username) | 
         (User.phone_no == _user_info.phone_no) 
     ).first()
     return exist_user

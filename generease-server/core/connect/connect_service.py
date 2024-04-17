@@ -24,16 +24,14 @@ def get_connect_list(db: Session, _data: str, key: str):
     return field
 
 def create_connect_req(db: Session, _connect: ConnectReq, _user: User):
+    # sse-starlette
+    # https://alive-wong.tistory.com/47
     db_connect = Connect(
         requester_id = _connect.requester_id,
         responser_id = _connect.responser_id,
-        connect_way = _connect.connect_way,
+        content = _connect.content,
         status = RESERVE_STATUS.PENDING
     )
     db.add(db_connect)
     db.commit()
     return json.dumps({"result" : "Y"})
-
-# def create_connect_res(db: Session):
-
-
