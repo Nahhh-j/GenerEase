@@ -49,10 +49,13 @@ def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
         "nickname": user.nickname
     }
 # 앱 실행 시 호출(401이면, 로그인으로)
-@router.post("/refresh")
+@router.post("/refresh", summary="토큰 재발급 또는 자동로그인-ALL(AUTH)")
 def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
     try:
-        phone_no = decode_token(refresh_token)
+        # phone_no = decode_token(refresh_token)
+        payload = jwt.decode(refresh_token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+         # type : Bearer, credentails: token
+        phone_no: str = payload.get("sub")
         if phone_no is None:
             raise error.credentials_exception
     except JWTError:
