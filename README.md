@@ -40,7 +40,7 @@
 
 ### 📌 프로젝트 구성도
 
-<img src="Github/assets/스크린샷 2024-04-21 오후 4.58.17.png" alt="구성도" width="761">
+<img width="813" alt="스크린샷 2024-04-21 오후 4 58 17" src="https://github.com/Nahhh-j/GenerEase/assets/105144666/f2ac519d-92c5-4b8e-a5a1-0bdc912aaba7">
 
 <br>
 
