@@ -103,8 +103,3 @@ def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(data
             raise credentials_exception
         return user
     
-# @router.post("/delete", summary="유저 삭제")
-# def del_user(token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db), _user: User = Depends(current_user)):
-#     try:
-#         user_service.delete_user(_user.user_id)
-

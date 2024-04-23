@@ -67,5 +67,12 @@ class Cmmd_code(database.Base):
     val = Column(String(400))
     tsk = Column(String(400))
 
-
+class Noti(database.Base):
+    __tablename__ = "noti"
+    noti_id = Column(Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("user.user_id"), unique=True)
+    connect_id = Column(Integer, ForeignKey("connect.connect_id"), unique=True)
+    noti_title = Column(String(255))
+    noti_content = Column(String(2555))
+    created_at = Column(DateTime, default=func.now())
 

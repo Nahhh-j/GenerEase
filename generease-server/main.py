@@ -9,6 +9,7 @@ from api.auth import auth_router
 from api.connect import connect_router
 from api.responser import responser_router
 from api.requester import requester_router
+from api.noti import noti_router
 
 from core.auth.auth_middleware import renew_auth
 
@@ -35,3 +36,4 @@ app.include_router(auth_router.router)
 app.include_router(connect_router.router)
 app.include_router(responser_router.router)
 app.include_router(requester_router.router)
+app.include_router(noti_router.router)

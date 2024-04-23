@@ -56,7 +56,9 @@ def get_progrs_cnct(db: Session = Depends(database.get_db), _user: User = Depend
     except error:
         raise error
 
-# 
+#상담 취소 추가 예정
+# @router.delete("del_")
+
 @router.post("/create_cnct_req", summary="상담 생성 요청-NORMAL(AUTH)", description="호출 전에, /requester/whether_request API desc 참조바람.")
 def create_cnct_req(_connect: ConnectReq, db: Session = Depends(database.get_db), _user: User = Depends(current_user)):
     try:

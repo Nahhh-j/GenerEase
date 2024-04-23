@@ -2,6 +2,7 @@ import json
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from util.constants import ROLE
+from util.http_error import http_bad_request_check, http_success_check
 from util.util import get_now, issued_hash, issued_token, make_nickname
 from model.database import get_db
 from model.models import User
@@ -34,5 +35,13 @@ def get_exist_user_by_data(db: Session, _data: str, key: str):
         getattr(User, key) == _data
     ).first()
 
-# def delete_user(db: Session, user_id: str):
+def del_user(phone_no, db: Session):
+    user = db.query(User).filter(User.phone_no == phone_no).first()
+    if user is None:
+        raise http_bad_request_check()
+    db.query(User).filter(User.user_id == user.user_id).delete()
+    db.commit()
+    return http_success_check(200)
+
+    
     
