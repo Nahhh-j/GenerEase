@@ -4,12 +4,15 @@ from jose import JWTError
 
 from sqlalchemy.orm import Session
 from api.auth.auth_router import current_user
+from core.requester.requester_service import get_requester
+from core.responser.responser_service import get_responser
 from model import database
 from model.models import User
 from schema.connect.connect_schema import ConnectReq
+from schema.user.user_schema import LoginUser
 from util.constants import RESERVE_TYPE, ROLE
 
-from core.connect.connect_service import create_connect_req, get_average_field, get_cnct_field
+from core.connect.connect_service import create_connect_req, get_average_field, get_cnct_field, get_connect_list, get_progress_connect
 from util import error
 from starlette import status
 
@@ -34,6 +37,24 @@ def get_connect_field(db: Session = Depends(database.get_db)):
         return get_cnct_field(db) 
     except JWTError:
         raise error.credentials_exception
+    
+
+@router.get("/get_progrs_cnct", summary="진행중인 상담내역 조회-ALL(AUTH)", description="리턴한 예약 리스트 중, 가장 빠른 거 시간 보여주면됨.")
+def get_progrs_cnct(db: Session = Depends(database.get_db), _user: User = Depends(current_user)):
+    try:
+        if _user.role == ROLE.NORMAL:
+            requester = get_requester(db, _user)
+            if (requester == None):
+                return None
+            else:
+                req_progres_cnct = get_connect_list(db, requester.requester_id, "requester_id")
+                return req_progres_cnct
+        elif _user.role == ROLE.HELPER:
+            responser = get_responser(db, _user)
+            res_progres_cnct = get_connect_list(db, responser.responser_id, "responser_id")
+            return res_progres_cnct
+    except error:
+        raise error
 
 # 
 @router.post("/create_cnct_req", summary="상담 생성 요청-NORMAL(AUTH)", description="호출 전에, /requester/whether_request API desc 참조바람.")

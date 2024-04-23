@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from model.models import Cmmd_code, Connect, User
 from schema.connect.connect_schema import ConnectReq
+from schema.user.user_schema import LoginUser
 from util.constants import RESERVE_STATUS, RESERVE_TYPE, RESPONSER_AVG_TIME
 
 def get_cnct_field(db: Session):
@@ -21,7 +22,12 @@ def get_connect_list(db: Session, _data: str, key: str):
     field = db.query(Connect).filter(
         getattr(Connect, key) == _data
     ).all()
+    print(field)
     return field
+
+def get_progress_connect(db: Session, _user: User):
+    progress = db.query(Connect).filter(Connect.requester_id == id)
+
 
 def create_connect_req(db: Session, _connect: ConnectReq, _user: User):
     # sse-starlette

@@ -1,10 +1,21 @@
 from datetime import timezone, datetime, timedelta
+import os
 import jwt
+from dotenv import load_dotenv
+from twilio.rest import Client
 
+load_dotenv()
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+ALGORITHM = os.environ.get("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = 60*24
 REFRESH_TOKEN_EXPIRE_MINUTES = 600*24
-SECRET_KEY = "02958cc4bd3a07049b27c41939160867589617cc3da118f8b9ed55d975f2d785"
-ALGORITHM = "HS256"
+
+TWILIO_RECOVERY_CODE = os.environ.get("TWILIO_RECOVERY_CODE")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NO = os.environ.get("TWILIO_PHONE_NO")
+
 
 def issue_access(sub: str):
     data = {"sub": sub, "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)}
@@ -21,3 +32,10 @@ def decode_token(token: str):
     phone_no: str = payload.get("sub")
     return phone_no
 
+def send_sms():
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    client.messages.create(
+        to="+821082831292",
+        from_=TWILIO_PHONE_NO,
+        body="g2"
+    )

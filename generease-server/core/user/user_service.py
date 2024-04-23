@@ -33,3 +33,6 @@ def get_exist_user_by_data(db: Session, _data: str, key: str):
     return db.query(User).filter(
         getattr(User, key) == _data
     ).first()
+
+# def delete_user(db: Session, user_id: str):
+    

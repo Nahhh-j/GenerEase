@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from core.auth.auth_service import ALGORITHM, SECRET_KEY, decode_token, issue_access, issue_refresh
 from util import error
+from model.models import Requester, User
 
 # https://dev-blackcat.tistory.com/7
 # https://mopil.tistory.com/182
@@ -16,8 +17,14 @@ from starlette import status
 
 from schema.user.user_schema import CreateUser, LoginUser
 from core.user import user_service
+from core.auth import auth_service
+from core.connect import connect_service
+from core.requester import requester_service
+from core.responser import responser_service
 
 from jose import jwt, JWTError
+
+from util.constants import ROLE
 
 router = APIRouter(
     prefix="/auth",
@@ -28,6 +35,8 @@ router = APIRouter(
 # 회원가입 라우터:
 @router.post("/register", status_code=status.HTTP_200_OK, summary="회원가입(NO AUTH)")
 def create_user(_user_info: CreateUser, db: Session = Depends(database.get_db)):
+    auth_service.send_sms()
+    
     # 추후 핸드폰번호 인증을 이 사이 추가.
     user = user_service.get_exist_user(db, _user_info)
     if user:
@@ -46,8 +55,11 @@ def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
     return {
         "access_token": issue_access(user.phone_no),
         "refresh_token": issue_refresh(user.phone_no),
-        "nickname": user.nickname
+        "username": user.username,
+        "user_img": user.user_img,
+        "role": user.role,
     }
+
 # 앱 실행 시 호출(401이면, 로그인으로)
 @router.post("/refresh", summary="토큰 재발급 또는 자동로그인-ALL(AUTH)")
 def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
@@ -68,7 +80,7 @@ def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depen
         "access_token": issue_access(user.phone_no),
         "refresh_token": issue_refresh(user.phone_no),
         "nickname": user.nickname
-    }
+    }    
 
 def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(
@@ -90,3 +102,9 @@ def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(data
         if user is None:
             raise credentials_exception
         return user
+    
+# @router.post("/delete", summary="유저 삭제")
+# def del_user(token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db), _user: User = Depends(current_user)):
+#     try:
+#         user_service.delete_user(_user.user_id)
+

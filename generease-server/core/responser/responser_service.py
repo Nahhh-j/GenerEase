@@ -3,7 +3,6 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
-from api.auth.auth_router import current_user
 from model.models import Responser, User
 from schema.responser.responser_schema import ResponserApply, ResponserListReq
 from util.constants import ROLE
@@ -26,6 +25,11 @@ def get_responsers_by_type(db: Session, _reserve_type: ResponserListReq):
         }
         user_infos.append(user_info)
     return user_infos
+
+def get_responser(db: Session, _user: User):
+    res = db.query(Responser).filter(Responser.user_id == _user.user_id).first()
+    print(res)
+    return res
 
 def create_responser(db: Session, _apply: ResponserApply, _user: User):
     http_forbidden_check(_user.role, ROLE.HELPER)

@@ -1,7 +1,7 @@
 import json
 
 from sqlalchemy.orm import Session
-from model.models import Connect, Requester, User
+from model.models import Connect, Requester, Responser, User
 from schema.requester.requester_schema import ApplyResult, RequesterApply
 from util.constants import ROLE
 
@@ -29,6 +29,11 @@ def whether_request(db: Session, _user: User):
         else:
             result = ApplyResult(requester_id=whether_requester.requester_id,apply="Y")
         return result
+    
+def get_requester(db: Session, _user: User):
+    req = db.query(Requester).filter(Requester.user_id == _user.user_id).first()
+    print(req)
+    return req
 
 def create_requester(db: Session, _user: User):
     db_requester = Requester(
