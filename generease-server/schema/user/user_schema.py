@@ -18,10 +18,13 @@ class User(BaseModel):
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
+class RegisterUser(BaseModel):
+    phone_no: str
+
 # https://tech.isyncbrain.com/python/fastapi/pydantic/validation/2022/04/25/fast-api-validator.html
 class CreateUser(BaseModel):
     username: str
-    phone_no: str = Field(pattern='^\d{3}-\d{4}-\d{4}$')
+    phone_no: str
     birth: str = Field(pattern='^\d{4}-\d{2}-\d{2}$')
 
     @field_validator('birth')

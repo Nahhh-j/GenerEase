@@ -3,6 +3,14 @@ from sqlalchemy.orm import relationship
 
 from model import database
 
+class Auth(database.Base):
+    __tablename__ = "auth"
+
+    id = Column(Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
+    phone_no = Column(String(20), unique=True, nullable=False)
+    auth_code = Column(String(4), nullable=False)
+    created_at = Column(DateTime, default=func.now())
+
 class User(database.Base):
     __tablename__ = "user"
 
