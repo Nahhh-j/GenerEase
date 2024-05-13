@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:generease/app/ui/screen/contacts_screen.dart';
+import 'package:generease/app/ui/screen/invite_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:generease/app/ui/screen/apply_screen.dart';
@@ -203,7 +204,9 @@ class HomeScreen extends StatelessWidget {
                           width: 20,
                         ),
                         _blueBox(
-                          ontap: () {},
+                          ontap: () {
+                            Get.to(() => const InviteScreen());
+                          },
                           icon: 'mailIcon',
                           text: '친구초대',
                         ),
