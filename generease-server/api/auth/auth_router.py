@@ -1,5 +1,5 @@
 from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from fastapi.security import HTTPBearer
 from core.auth.auth_service import ALGORITHM, SECRET_KEY, decode_token, issue_access, issue_refresh
 from util import error
@@ -35,15 +35,23 @@ router = APIRouter(
     tags=["인증"]
 )
 
-# 회원가입1: post 전화번호만 입력하면 랜덤 인증번호 4자리 전송
 @router.post("/register", status_code=status.HTTP_200_OK, summary="회원가입1: 전화번호 입력 후 랜덤 인증번호 전송")
 def create_user(_user_info: RegisterUser, db: Session = Depends(database.get_db)):
     # 랜덤 인증번호 생성
     auth_code = auth_service.generate_auth_code()
 
-    # 생성된 인증번호 DB에 저장
-    auth_data = Auth(phone_no=_user_info.phone_no, auth_code=auth_code)
-    db.add(auth_data)
+    # 전화번호로 기존 레코드 조회
+    existing_auth = db.query(Auth).filter(Auth.phone_no == _user_info.phone_no).first()
+
+    if existing_auth:
+        # 기존 레코드가 있으면 인증번호 업데이트
+        existing_auth.auth_code = auth_code
+    else:
+        # 기존 레코드가 없으면 새로운 레코드 생성
+        auth_data = Auth(phone_no=_user_info.phone_no, auth_code=auth_code)
+        db.add(auth_data)
+
+    # 변경사항 저장
     db.commit()
 
     # 사용자가 입력한 핸드폰 번호로 SMS 전송
@@ -51,7 +59,6 @@ def create_user(_user_info: RegisterUser, db: Session = Depends(database.get_db)
 
     return {"message": "인증번호가 전송되었습니다."}
 
-# 회원가입2: 전화번호의 랜덤 인증번호 auth가 db에 저장되어 같은 인증번호를 사용자가 입력하고 성공
 @router.post("/verify", status_code=status.HTTP_200_OK, summary="회원가입2: 인증번호 확인")
 def verify_auth_code(data: dict, db: Session = Depends(database.get_db)):
     phone_no = data.get("phone_no")
@@ -64,7 +71,14 @@ def verify_auth_code(data: dict, db: Session = Depends(database.get_db)):
 
     # 사용자가 입력한 인증번호와 DB에 저장된 인증번호 일치 여부 확인
     if auth_data.auth_code == auth_code:
-        return {"message": "인증 성공!"}
+        # Check if the user already exists
+        existing_user = db.query(User).filter(User.phone_no == phone_no).first()
+        if existing_user:
+            # If user exists, issue new access token for automatic login
+            access_token = issue_access(phone_no)
+            return {"message": "자동 로그인 성공!", "access_token": access_token}
+        else:
+            return {"message": "인증 성공!"}
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="인증번호가 일치하지 않습니다.")
 
@@ -98,43 +112,52 @@ def complete_registration(data: dict, db: Session = Depends(database.get_db)):
 #     # 사용자가 입력한 핸드폰 번호로 SMS 전송
 #     auth_service.send_sms(_user_info.phone_no, "회원가입을 축하합니다!")
 
-# NO-AUTH
-# 로그인 라우터;
-@router.post("/login", summary="로그인(NO AUTH)")
-def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
-    # 추후 핸드폰번호 인증을 이 사이 추가.
-    user = user_service.get_user(db, phone_no=_user_info.phone_no)
-    if not user:
-        raise error.credentials_exception
-    return {
-        "access_token": issue_access(user.phone_no),
-        "refresh_token": issue_refresh(user.phone_no),
-        "username": user.username,
-        "user_img": user.user_img,
-        "role": user.role,
-    }
+# # NO-AUTH
+# # 로그인 라우터;
+# @router.post("/login", summary="로그인(NO AUTH)")
+# def login_user(_user_info: LoginUser, db: Session = Depends(database.get_db)):
+#     user = user_service.get_user(db, phone_no=_user_info.phone_no)
+#     if not user:
+#         raise error.credentials_exception
+#     return {
+#         "access_token": issue_access(user.phone_no),
+#         "refresh_token": issue_refresh(user.phone_no),
+#         "username": user.username,
+#         "user_img": user.user_img,
+#         "role": user.role,
+#     }
 
-# 앱 실행 시 호출(401이면, 로그인으로)
-@router.post("/refresh", summary="토큰 재발급 또는 자동로그인-ALL(AUTH)")
-def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
-    try:
-        # phone_no = decode_token(refresh_token)
-        payload = jwt.decode(refresh_token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-         # type : Bearer, credentails: token
-        phone_no: str = payload.get("sub")
-        if phone_no is None:
-            raise error.credentials_exception
-    except JWTError:
-        raise error.credentials_exception
-    user = user_service.get_user(db, phone_no)
-    if user is None:
-        raise error.credentials_exception
+# # 앱 실행 시 호출(401이면, 로그인으로)
+# @router.post("/refresh", summary="토큰 재발급 또는 자동로그인-ALL(AUTH)")
+# def refresh_user(refresh_token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
+#     try:
+#         # 토큰 디코딩
+#         payload = jwt.decode(refresh_token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        
+#         # 페이로드에서 전화번호 추출
+#         phone_no: str = payload.get("sub")
+        
+#         if phone_no is None:
+#             raise error.credentials_exception
+#     except JWTError:
+#         raise error.credentials_exception
     
-    return {
-        "access_token": issue_access(user.phone_no),
-        "refresh_token": issue_refresh(user.phone_no),
-        "nickname": user.nickname
-    }    
+#     # 사용자 조회
+#     user = user_service.get_user(db, phone_no)
+#     if user is None:
+#         raise error.credentials_exception
+    
+#     # 새로운 액세스 토큰 발급
+#     new_access_token = issue_access(user.phone_no)
+    
+#     # 새로운 리프레시 토큰 발급
+#     new_refresh_token = issue_refresh(user.phone_no)
+    
+#     return {
+#         "access_token": new_access_token,
+#         "refresh_token": new_refresh_token,
+#         "nickname": user.nickname
+#     }
 
 def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(
@@ -156,4 +179,3 @@ def current_user (token: str = Depends(HTTPBearer()), db: Session = Depends(data
         if user is None:
             raise credentials_exception
         return user
-    
