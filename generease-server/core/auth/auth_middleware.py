@@ -16,4 +16,3 @@ class renew_auth(BaseHTTPMiddleware):
             if status == 200 :
                 response.headers["Authorization"] = f"Bearer {issue_access(decoding_info)}"       
         return response
-    

@@ -11,22 +11,21 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60*24
 REFRESH_TOKEN_EXPIRE_MINUTES = 600*24
 
 COOLSMS_API_KEY = "NCS8C6GNWSWEV8VG"
-COOLSMS_API_SECRET = "C3GV8I9PHHR6ZPR4XOC5K1OSEISVLOOC"
+COOLSMS_API_SECRET = "7RAYWUPGDARODRKYY68BOHZDNUT396SZ"
 
-def issue_access(sub: str):
-    data = {"sub": sub, "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)}
-    access_token = jwt.encode(data, SECRET_KEY, ALGORITHM).encode("utf-8")
+def issue_access(phone_no: str):
+    data = {"sub": phone_no}
+    access_token = jwt.encode(data, str(SECRET_KEY), ALGORITHM)
     return access_token
 
-def issue_refresh(sub: str):
-    data = {"sub": sub, "exp": datetime.now(timezone.utc) + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)}
-    refresh_token = jwt.encode(data, SECRET_KEY, ALGORITHM).encode("utf-8")
+def issue_refresh(phone_no: str):
+    data = {"sub": phone_no}
+    refresh_token = jwt.encode(data, str(SECRET_KEY), ALGORITHM)
     return refresh_token
 
-def decode_token(token: str):    
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    phone_no: str = payload.get("sub")
-    return phone_no
+def decode_token(token: str) -> dict:
+    payload = jwt.decode(token, str(SECRET_KEY), algorithms=[ALGORITHM])
+    return payload
 
 def send_sms(recipient_number: str, message: str):
     params = {
