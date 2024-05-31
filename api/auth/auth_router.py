@@ -6,10 +6,10 @@ from util import error
 from model.models import Requester, User, Auth
 from sdk.api.message import Message
 from sdk.exceptions import CoolsmsException
-from typing import List
 
 # https://dev-blackcat.tistory.com/7
 # https://mopil.tistory.com/182
+# export ALGORITHM=HS256
 
 from sqlalchemy.orm import Session
 
@@ -30,13 +30,13 @@ from jose import jwt, JWTError
 from util.constants import ROLE
 
 from random import randint
+from datetime import datetime
 
 router = APIRouter(
     prefix="/auth",
     tags=["인증"]
 )
 
-# 회원가입1: post 전화번호만 입력하면 랜덤 인증번호 4자리 전송
 @router.post("/register", status_code=status.HTTP_200_OK, summary="회원가입1: 전화번호 입력 후 랜덤 인증번호 전송")
 def create_user(_user_info: RegisterUser, db: Session = Depends(database.get_db)):
     # 랜덤 인증번호 생성
@@ -48,16 +48,22 @@ def create_user(_user_info: RegisterUser, db: Session = Depends(database.get_db)
     if existing_auth:
         # 기존 레코드가 있으면 인증번호 업데이트
         existing_auth.auth_code = auth_code
+        # 기존 레코드가 있으면 이미 생성된 객체를 사용
+        auth_data = existing_auth
     else:
         # 기존 레코드가 없으면 새로운 레코드 생성
         auth_data = Auth(phone_no=_user_info.phone_no, auth_code=auth_code)
         db.add(auth_data)
 
-    # 변경사항 저장
     db.commit()
 
     # 사용자가 입력한 핸드폰 번호로 SMS 전송
     auth_service.send_sms(_user_info.phone_no, f"인증번호는 {auth_code}입니다. 회원가입을 진행해주세요!")
+    current_time = datetime.now()
+    auth_data.created_at = current_time
+
+    # 변경사항 다시 저장
+    db.commit()
 
     return {"message": "인증번호가 전송되었습니다."}
 
@@ -162,25 +168,3 @@ def current_user(token: str = Depends(HTTPBearer()), db: Session = Depends(datab
         if user is None:
             raise credentials_exception
         return user
-
-@router.post("/invite", status_code=status.HTTP_200_OK, summary="선택한 번호들에 초대 메세지 전송")
-def send_invitation(request: Request, invited_numbers: List[str], current_user: User = Depends(current_user)):
-    invited_names = []
-
-    if not isinstance(invited_numbers, list):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Input should be a valid list")
-
-    # 초대 메시지에 로그인한 사용자의 이름 추가
-    invitation_message = f"{current_user.username}님이 제너이즈의 사용자로 초대했습니다. 아래 URL을 클릭해 회원가입을 시작하세요."
-
-    # 초대 메시지 전송
-    for number in invited_numbers:
-        try:
-            # 사용자에게 초대 메시지 전송
-            auth_service.send_sms(number, invitation_message)
-            invited_names.append(number)  # 초대된 사용자 번호 기록
-        except Exception as e:
-            # 전송 중 오류가 발생한 경우, 해당 번호를 기록하고 계속 진행
-            invited_names.append(f"Failed to invite: {number}")
-
-    return {"message": "초대 메시지가 성공적으로 전송되었습니다.", "invited_names": invited_names}
