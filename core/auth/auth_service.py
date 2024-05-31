@@ -14,13 +14,13 @@ COOLSMS_API_KEY = "NCS8C6GNWSWEV8VG"
 COOLSMS_API_SECRET = "7RAYWUPGDARODRKYY68BOHZDNUT396SZ"
 
 def issue_access(phone_no: str):
-    data = {"sub": phone_no}
-    access_token = jwt.encode(data, str(SECRET_KEY), ALGORITHM)
+    access_data = {"sub": phone_no, "token_type": "access"}
+    access_token = jwt.encode(access_data, str(SECRET_KEY), ALGORITHM)
     return access_token
 
 def issue_refresh(phone_no: str):
-    data = {"sub": phone_no}
-    refresh_token = jwt.encode(data, str(SECRET_KEY), ALGORITHM)
+    refresh_data = {"sub": phone_no, "token_type": "refresh"}
+    refresh_token = jwt.encode(refresh_data, str(SECRET_KEY), ALGORITHM)
     return refresh_token
 
 def decode_token(token: str) -> dict:
