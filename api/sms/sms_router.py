@@ -21,8 +21,14 @@ def post_send_invitation(request: Request, invited_numbers: List[str] = Query(..
 # 프론트에서 전달한 연락처 필터링을 통해 user의 이름(실명) 및 전화번호 가져오기
 # 테스트 방법 : GET /sms/emergency_contacts?phone_numbers=0100000000&phone_numbers=010111111111&phone_numbers=010-5888-1234&...
 @router.get("/emergency_contacts", status_code=status.HTTP_200_OK, summary="비상연락망 조회")
-def get_get_emergency_contacts(phone_numbers: List[str] = Query(...), current_user: User = Depends(current_user), db: Session = Depends(get_db)):
-    return get_emergency_contacts(phone_numbers, current_user, db)
+def get_emergency_contacts(phone_numbers: List[str] = Query(...), current_user: User = Depends(current_user), db: Session = Depends(get_db)):
+    # 프론트엔드에서 전달한 연락처 리스트를 기준으로 일치하는 회원 정보 조회
+    db_users = db.query(User).filter(User.phone_no.in_(phone_numbers)).all()
+
+    # 본인 정보를 제외한 사용자 정보를 반환
+    users_except_self = [{"username": user.username, "phone_no": user.phone_no} for user in db_users if user.user_id != current_user.user_id]
+    
+    return users_except_self
 
 
 # 비상연락 전화 버튼 선택 시 문자도 전송
