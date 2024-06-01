@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:generease/app/ui/screen/consulting/connected_screen.dart';
 import 'package:generease/app/ui/screen/contacts_screen.dart';
 import 'package:generease/app/ui/screen/invite_screen.dart';
 import 'package:get/get.dart';
@@ -228,7 +229,10 @@ class HomeScreen extends StatelessWidget {
                     ),
                     _whiteBox(
                       ontap: () {
-                        print('앱 가이드 영상');
+                        Get.to(
+                          () => ConnectedScreen(),
+                          arguments: {'name': '조나희', 'phoneNum': '01031090060'},
+                        );
                       },
                       text: '앱 가이드 영상',
                       imagePath: 'assets/icons/check.png',

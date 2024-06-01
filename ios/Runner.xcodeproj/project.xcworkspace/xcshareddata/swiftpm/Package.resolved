@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "broadcastwriter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/romiroma/BroadcastWriter.git",
+      "state" : {
+        "revision" : "ef52e6f09f12c60bcca8544934799a5863947a7f",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
